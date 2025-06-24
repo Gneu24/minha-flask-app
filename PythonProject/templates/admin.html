@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="admin-panel">
+    <h1>Painel de Administração</h1>
+    <p>Gerencie os usuários do sistema</p>
+</div>
+
+<div class="card">
+    <h2>Todos os Usuários</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome de Usuário</th>
+                <th>Admin</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ 'Sim' if user.is_admin else 'Não' }}</td>
+                    <td class="actions">
+                        {% if not user.is_admin %}
+                            <a href="{{ url_for('toggle_admin', user_id=user.id) }}" class="btn">Tornar Admin</a>
+                        {% endif %}
+                        {% if user != current_user %}
+                            <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" style="display: inline;">
+                                <button type="submit" class="btn btn-danger">Deletar</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

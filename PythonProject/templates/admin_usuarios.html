@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Gerenciar Usuários{% endblock %}
+{% block content %}
+<h2>Usuários Cadastrados</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>ID</th><th>Usuário</th><th>Email</th><th>Admin</th><th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in usuarios %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ 'Sim' if user.is_admin else 'Não' }}</td>
+            <td>
+                {% if user != current_user %}
+                    <a href="{{ url_for('toggle_admin', user_id=user.id) }}" class="btn btn-sm btn-outline-primary">
+                        {% if user.is_admin %}Remover Admin{% else %}Tornar Admin{% endif %}
+                    </a>
+                    <a href="{{ url_for('delete_user', user_id=user.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
+                {% else %}
+                    <span class="text-muted">Você</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">← Voltar</a>
+{% endblock %}

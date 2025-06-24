@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>Enviar Arquivo</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="file" name="file" required>
+        </div>
+        <button type="submit" class="btn">Enviar</button>
+    </form>
+</div>
+{% endblock %}

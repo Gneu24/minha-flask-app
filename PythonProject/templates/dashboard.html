@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Painel de Controle{% endblock %}
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h2 class="card-title">Bem-vindo, {{ user.username }}!</h2>
+
+        <form method="POST" enctype="multipart/form-data" class="my-4">
+            <div class="mb-3">
+                <label class="form-label">Enviar novo arquivo:</label>
+                <input type="file" name="arquivo" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+
+        <h5>Seus Arquivos:</h5>
+        <ul class="list-group mb-4">
+            {% for arq in arquivos %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ arq.nome_arquivo }}
+                    <a href="{{ url_for('download_arquivo', filename=arq.nome_arquivo) }}" class="btn btn-sm btn-outline-secondary">Baixar</a>
+                </li>
+            {% else %}
+                <li class="list-group-item">Nenhum arquivo enviado ainda.</li>
+            {% endfor %}
+        </ul>
+
+        {% if user.is_admin %}
+        <h5>Usuários cadastrados:</h5>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Usuário</th><th>Email</th><th>Admin</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in usuarios %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ 'Sim' if u.is_admin else 'Não' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Sair</a>
+    </div>
+</div>
+{% endblock %}
